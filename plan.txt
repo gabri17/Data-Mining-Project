@@ -1,0 +1,40 @@
+0. Introduction
+- Data provenance.
+- System specification.
+
+1. Data processing and cleaning
+- Info (numbers) about rows, columns, datatypes.
+- Modify column datatypes.
+- Add season information. Extract data information.
+- - Add deltas?
+- Any missing value? In case handle it, with mean/median/removing it.
+- Manage Mogadishu case.
+- Find HUGE outliers respect to season. In case handle it.
+
+2. EDA
+
+SS: df.describe()
+
+1) Summary statistics - in general for all dataset (per column).
+- Mean, std dev, qunatiles.
+- Boxplots and histograms for data distributions.
+
+Select some relevant cities (one per continent + 2 at same lat + 2 at same long).
+
+2) Summary statistics - for singular city (per column). Compare near to see huge differences.
+- Mean, std dev, quantiles.
+- Boxplots and histograms for data distributions.
+- Time plots of some columns. Snowfall, rains, temperatures. For different cities and then make them overlap for a single city.
+
+3) On a pair of city, aggregate for season. And do the same.
+
+4) Pair plot with correlations - find patterns. On entire dataset. Then aggregating on seasons.
+- Correlation heatmap is cool too.
+
+5) Geomap to represent temperature/rain.
+- Mean for a year: temperature (color) and rains (size).
+- - Evolution: can select mean, max, min!
+- Temperature per day with time evolution.
+- - Maybe just plot how anomaly is respect to the mean?
+
+3. We dance.
