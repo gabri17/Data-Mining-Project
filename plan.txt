@@ -6,10 +6,10 @@
 - Info (numbers) about rows, columns, datatypes.
 - Modify column datatypes.
 - Add season information. Extract data information.
-- - Add deltas?
+!   - - Add deltas?
 - Any missing value? In case handle it, with mean/median/removing it.
 - Manage Mogadishu case.
-- Find HUGE outliers respect to season. In case handle it.
+!- Find HUGE outliers respect to season. In case handle it.
 
 2. EDA
 
@@ -19,17 +19,20 @@ SS: df.describe()
 - Mean, std dev, qunatiles.
 - Boxplots and histograms for data distributions.
 
+Maybe snowfall for some countries.
+Time vs solar radiation.
+
+2) Pair plot with correlations - find patterns. On entire dataset. Then aggregating on seasons.
+- Correlation heatmap is cool too.
+
 Select some relevant cities (one per continent + 2 at same lat + 2 at same long).
 
 2) Summary statistics - for singular city (per column). Compare near to see huge differences.
-- Mean, std dev, quantiles.
-- Boxplots and histograms for data distributions.
+- Mean, std dev, quantiles. Per single city.
+- Boxplots and histograms for data distributions. Maybe just for snow and something. Or per season.
 - Time plots of some columns. Snowfall, rains, temperatures. For different cities and then make them overlap for a single city.
 
-3) On a pair of city, aggregate for season. And do the same.
-
-4) Pair plot with correlations - find patterns. On entire dataset. Then aggregating on seasons.
-- Correlation heatmap is cool too.
+4) On a pair of city, aggregate for season. And do the same.
 
 5) Geomap to represent temperature/rain.
 - Mean for a year: temperature (color) and rains (size).
