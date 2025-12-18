@@ -6,3 +6,14 @@ Poi: aggrego per stagioni. Vedo dati stagionali come valgono nel tempo.
 - andamento temperature dentro cluster (che sono solidi). se vedo un aumento per tutte le stagioni per tutti gli anni nelle diverse scale... ok.
 
 seguo ondate di calore? un cluster diventa un altro cluster in una stagione. vedere stagionalità anche a livello.
+
+MAX 12 PAGINE NEL REPORT.
+- Includere link al notebook.
+- Aggiungere i fallimenti.
+- Solo alcune immagini che diano una narrazione.
+
+Presentazione progetto: max 10 slides, all inclusive.
+- 10' presentazione progetto.
+- 10' domande progetto.
+- 10' domande random dalla lista fornita.
+- - Se ho fatto clustering, sicuramente qualcosa di network.
