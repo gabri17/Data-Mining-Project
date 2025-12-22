@@ -1,0 +1,5 @@
+A seguito del danno effettuato, ho perso:
+- il confronto staistico di alcune città triennio prec vs triennio succ
+- il grafico mondiale con l'evoluzione dei cluster con lo slider
+
+"Poco male", rifacciamo tutto questo fatto bene.
