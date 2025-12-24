@@ -51,7 +51,6 @@ def get_colors():
     my_colors = {i: hex_codes[i] for i in range(len(hex_codes))}
     return my_colors
 
-
 def plot_world_slider_streamlit_go(df, years=list(range(1995,2025)), n_clusters=5, method="K-Means"):
     """
     Crea una mappa coropletica animata con slider e tasto play per Streamlit.
@@ -485,6 +484,143 @@ def plot_precip_evo(cluster_means_anni, year_period, n_clusters=5):
     plt.tight_layout()
     return fig
 
+def plot_temp_evo_city(cluster_means_anni, df_clusters_anni, aggregated_data, year_period, city):
+
+    aggregated_data_city = aggregated_data[aggregated_data["capital"] == city].copy()
+    city_temps = aggregated_data_city.set_index("year")["rain_total"]
+    cluster_temps = {}
+
+    # Grafico evoluzione temperature CLUSTER e CITTA
+
+    cluster_temps = {}
+    cluster_ids = {}
+    for year in year_period:
+        df_year = df_clusters_anni.get(year)
+        if df_year is None:
+            continue
+        row = df_year[df_year["capital"] == city]
+        if row.empty:
+            continue
+        cluster_id = int(row["cluster"].iloc[0])
+        cluster_ids[year] = cluster_id
+        try:
+            cluster_temps[year] = cluster_means_anni[year].loc[cluster_id, "rain_total"]
+        except KeyError:
+            cluster_temps[year] = np.nan
+    
+    fig = plt.figure(figsize=(16, 8))
+    plt.plot(
+        year_period,
+        [city_temps.get(year, np.nan) for year in year_period],
+        marker="o",
+        label=f"{city}",
+        linewidth=2,
+        color="#8c564b"
+    )
+    plt.plot(
+        year_period,
+        [cluster_temps.get(year, np.nan) for year in year_period],
+        marker="s",
+        label="Cluster di appartenenza",
+        linewidth=2,
+        color="#7f7f7f"
+    )
+
+    colors = get_colors()
+
+    for year in year_period:
+        curr_cluster = cluster_ids.get(year)
+        temp_val = cluster_temps.get(year, np.nan)
+        if not np.isnan(temp_val):
+            plt.annotate(
+                f"C{curr_cluster}",
+                xy=(year, temp_val),
+                xytext=(0, 10),
+                textcoords="offset points",
+                ha="center",
+                fontsize=10,
+                color=colors[curr_cluster],
+                fontweight="bold",
+            )
+    
+    plt.xlabel("Anno", fontsize=12)
+    plt.ylabel("Precipitazioni totali (mm)", fontsize=12)
+    plt.title(f"Evoluzione precipitazioni — {city}", fontsize=14, fontweight="bold")
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    return fig
+
+def plot_precip_evo_city(cluster_means_anni, df_clusters_anni, aggregated_data, year_period, city):
+
+    aggregated_data_city = aggregated_data[aggregated_data["capital"] == city].copy()
+    city_temps = aggregated_data_city.set_index("year")["mean_temp"]
+    cluster_temps = {}
+
+    # Grafico evoluzione temperature CLUSTER e CITTA
+
+    cluster_temps = {}
+    cluster_ids = {}
+    for year in year_period:
+        df_year = df_clusters_anni.get(year)
+        if df_year is None:
+            continue
+        row = df_year[df_year["capital"] == city]
+        if row.empty:
+            continue
+        cluster_id = int(row["cluster"].iloc[0])
+        cluster_ids[year] = cluster_id
+        try:
+            cluster_temps[year] = cluster_means_anni[year].loc[cluster_id, "mean_temp"]
+        except KeyError:
+            cluster_temps[year] = np.nan
+    
+    fig = plt.figure(figsize=(16, 8))
+    plt.plot(
+        year_period,
+        [city_temps.get(year, np.nan) for year in year_period],
+        marker="o",
+        label=f"{city}",
+        linewidth=2,
+        color="#8c564b"
+    )
+    plt.plot(
+        year_period,
+        [cluster_temps.get(year, np.nan) for year in year_period],
+        marker="s",
+        label="Cluster di appartenenza",
+        linewidth=2,
+        color="#7f7f7f"
+    )
+
+    colors = get_colors()
+
+    for year in year_period:
+        curr_cluster = cluster_ids.get(year)
+        temp_val = cluster_temps.get(year, np.nan)
+        if not np.isnan(temp_val):
+            plt.annotate(
+                f"C{curr_cluster}",
+                xy=(year, temp_val),
+                xytext=(0, 10),
+                textcoords="offset points",
+                ha="center",
+                fontsize=10,
+                color=colors[curr_cluster],
+                fontweight="bold",
+            )
+    
+    plt.xlabel("Anno", fontsize=12)
+    plt.ylabel("Temperatura Media (°C)", fontsize=12)
+    plt.title(f"Evoluzione Temperature — {city}", fontsize=14, fontweight="bold")
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    return fig
+
+
 # Caricamento
 df_clusters_anni, cluster_means_anni = load_data()
 aggregation_per_year = load_raw_data()
@@ -574,6 +710,15 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
         
         st.pyplot(fig1, width='stretch')
         st.pyplot(fig2, width='stretch')
+
+        st.markdown("### 📊 Evoluzione città")
+        selected_city = st.selectbox("Capitale", sorted(capitals), key="c")
+        fig3 = plot_temp_evo_city(cluster_means_anni, df_clusters_anni, aggregation_per_year, years, selected_city)
+        st.pyplot(fig3, width='stretch')
+        fig4 = plot_precip_evo_city(cluster_means_anni, df_clusters_anni, aggregation_per_year, years, selected_city)
+        st.pyplot(fig4, width='stretch')
+
+
     # ==============================================================================
     # PAGINA 3: CONFRONTO DUE ANNI
     # ==============================================================================
