@@ -1,20 +1,18 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import plotly.express as px
 import plotly.graph_objects as go
-from sklearn.preprocessing import StandardScaler, MinMaxScaler
-from sklearn.cluster import KMeans
+from sklearn.preprocessing import MinMaxScaler
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
-import geopandas as gpd
 import plotly.graph_objects as go
 import numpy as np
 import streamlit as st
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import numpy as np
+
+#streamlit run app.py
 
 # ==============================================================================
 # 1. CONFIGURAZIONE E CARICAMENTO DATI
@@ -215,7 +213,6 @@ def plot_world_slider_streamlit_go(df, years=list(range(1995,2025)), n_clusters=
     )
 
     return fig
-
 
 def plot_comparison_maps(df, year_start, year_end, n_clusters=5):
     """
@@ -440,6 +437,54 @@ def plot_cluster_flow_sankey_first_to_last(df_clusters_dict, first_year, last_ye
             
     return fig
 
+def plot_temp_evo(cluster_means_anni, year_period, n_clusters=5):
+
+    comparison_data = {}
+
+    for year in year_period:
+        comparison_data[year] = cluster_means_anni[year]['mean_temp']
+
+    comparison_temp = pd.DataFrame(comparison_data)
+
+    # Grafico evoluzione temperature dopo remapping
+    fig = plt.figure(figsize=(16, 8))
+    for cluster_id in range(n_clusters):
+        if cluster_id in comparison_temp.index:
+            temps = comparison_temp.loc[cluster_id]
+            plt.plot(year_period, temps, marker='o', label=f'Cluster {cluster_id}', linewidth=2, markersize=8)
+
+    plt.xlabel('Anno', fontsize=12)
+    plt.ylabel('Temperatura Media (°C)', fontsize=12)
+    plt.title('Evoluzione Temperature Medie per Cluster nei Anni', fontsize=14, fontweight='bold')
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    return fig
+
+def plot_precip_evo(cluster_means_anni, year_period, n_clusters=5):
+    comparison_rain = {}
+    for year in year_period:
+        comparison_rain[year] = cluster_means_anni[year]['rain_total']
+
+    comparison_rain_df = pd.DataFrame(comparison_rain)
+
+    # Grafico evoluzione precipitazioni dopo remapping
+    fig = plt.figure(figsize=(16, 8))
+    for cluster_id in range(n_clusters):
+        if cluster_id in comparison_rain_df.index:
+            precips = comparison_rain_df.loc[cluster_id]
+            plt.plot(year_period, precips, marker='o', label=f'Cluster {cluster_id}', linewidth=2, markersize=8)
+
+    plt.xlabel('Anno', fontsize=12)
+    plt.ylabel('Precipitazioni annuali (mm)', fontsize=12)
+    plt.title('Evoluzione Precipitazioni Annuali per Cluster nei Anni', fontsize=14, fontweight='bold')
+    plt.legend(fontsize=10)
+    plt.grid(True, alpha=0.3)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    return fig
+
 # Caricamento
 df_clusters_anni, cluster_means_anni = load_data()
 aggregation_per_year = load_raw_data()
@@ -452,7 +497,7 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
     # SIDEBAR
     # ==============================================================================
     st.sidebar.title("Navigazione")
-    page = st.sidebar.radio("Vai a:", ["Mappa Annuale", "Confronto Anni", "Analisi Capitali (Radar)"])
+    page = st.sidebar.radio("Vai a:", ["Mappa Annuale", "Evoluzione temporale", "Confronto Anni", "Analisi Capitali (Radar)"])
     
     st.sidebar.markdown("---")
     st.sidebar.info(
@@ -517,9 +562,20 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
             ).round(2)
             st.dataframe(distribuzione, width='stretch')
             st.caption("Conteggio capitali per cluster nell'anno selezionato.")
-
+    
     # ==============================================================================
-    # PAGINA 2: CONFRONTO DUE ANNI
+    # PAGINA 2: EVOLUZIONE TEMPROALE
+    # ==============================================================================
+    elif page == "Evoluzione temporale":
+        st.title("🗺️ Evoluzione temperatura e precipitazioni")
+        
+        fig1 = plot_temp_evo(cluster_means_anni, years)
+        fig2 = plot_precip_evo(cluster_means_anni, years)
+        
+        st.pyplot(fig1, width='stretch')
+        st.pyplot(fig2, width='stretch')
+    # ==============================================================================
+    # PAGINA 3: CONFRONTO DUE ANNI
     # ==============================================================================
     elif page == "Confronto Anni":
         st.title("🗺️ Confronto biennale")
@@ -547,7 +603,7 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
         st.plotly_chart(fig_sankey, width='stretch')
 
     # ==============================================================================
-    # PAGINA 3: RADAR PLOT E CONFRONTO CAPITALI
+    # PAGINA 4: RADAR PLOT E CONFRONTO CAPITALI
     # ==============================================================================
     elif page == "Analisi Capitali (Radar)":
         st.title("🕸️ Analisi Dettagliata (Radar Plot)")
