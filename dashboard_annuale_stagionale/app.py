@@ -623,13 +623,11 @@ def plot_precip_evo_city(cluster_means_anni, df_clusters_anni, aggregated_data, 
 
 # Caricamento
 seasons = ["Winter", "Spring", "Summer", "Autumn"]
-selected_season = st.selectbox("Seleziona la stagione", seasons, key="season_selector")
-df_clusters_anni, cluster_means_anni = load_data(season=selected_season)
 aggregation_per_year = load_raw_data()
 years = aggregation_per_year['year'].unique()
 capitals = aggregation_per_year['capital'].unique()
 
-if df_clusters_anni is not None and cluster_means_anni is not None and aggregation_per_year is not None:
+if aggregation_per_year is not None:
     
     # ==============================================================================
     # SIDEBAR
@@ -648,6 +646,9 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
     # ==============================================================================
     if page == "Mappa Annuale":
         st.title("🗺️ Evoluzione Climatica Globale")
+        
+        selected_season = st.selectbox("Seleziona la stagione", seasons, key="season_selector")
+        df_clusters_anni, cluster_means_anni = load_data(season=selected_season)
         
         st.info("Premi 'Play' per vedere come cambiano i cluster climatici nel tempo.")
         
@@ -708,17 +709,21 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
     elif page == "Evoluzione temporale":
         st.title("🗺️ Evoluzione temperatura e precipitazioni")
         
-        fig1 = plot_temp_evo(cluster_means_anni, years)
-        fig2 = plot_precip_evo(cluster_means_anni, years)
+        page_season = st.selectbox("Seleziona la stagione", seasons, key="evo_season")
+        df_clusters_evo, cluster_means_evo = load_data(season=page_season)
+        aggregation_per_year_filtered = aggregation_per_year[aggregation_per_year["season"] == page_season]
+        
+        fig1 = plot_temp_evo(cluster_means_evo, years)
+        fig2 = plot_precip_evo(cluster_means_evo, years)
         
         st.pyplot(fig1, width='stretch')
         st.pyplot(fig2, width='stretch')
 
         st.markdown("### 📊 Evoluzione città")
         selected_city = st.selectbox("Capitale", sorted(capitals), key="c")
-        fig3 = plot_temp_evo_city(cluster_means_anni, df_clusters_anni, aggregation_per_year, years, selected_city)
+        fig3 = plot_temp_evo_city(cluster_means_evo, df_clusters_evo, aggregation_per_year_filtered, years, selected_city)
         st.pyplot(fig3, width='stretch')
-        fig4 = plot_precip_evo_city(cluster_means_anni, df_clusters_anni, aggregation_per_year, years, selected_city)
+        fig4 = plot_precip_evo_city(cluster_means_evo, df_clusters_evo, aggregation_per_year_filtered, years, selected_city)
         st.pyplot(fig4, width='stretch')
 
 
@@ -727,6 +732,9 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
     # ==============================================================================
     elif page == "Confronto Anni":
         st.title("🗺️ Confronto biennale")
+        
+        page_season = st.selectbox("Seleziona la stagione", seasons, key="confronto_season")
+        df_clusters_confronto, _ = load_data(season=page_season)
         
         col1, col2 = st.columns(2)
 
@@ -741,13 +749,13 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
             year2 = st.selectbox("Anno 2", sorted(years), key="y2", index=len(years)-1)
         
         # Genera il grafico
-        fig_compare = plot_comparison_maps(df_clusters_anni, year1, year2, n_clusters=5)
+        fig_compare = plot_comparison_maps(df_clusters_confronto, year1, year2, n_clusters=5)
         st.plotly_chart(fig_compare, width='stretch')
         
         st.info("💡 **Nota:** I paesi con colori vivaci hanno cambiato cluster tra i due anni selezionati. I paesi sbiaditi sono rimasti stabili.")
         
         st.markdown("### 📊 Flussi di capitali tra cluster")
-        fig_sankey = plot_cluster_flow_sankey_first_to_last(df_clusters_anni, year1, year2)
+        fig_sankey = plot_cluster_flow_sankey_first_to_last(df_clusters_confronto, year1, year2)
         st.plotly_chart(fig_sankey, width='stretch')
 
     # ==============================================================================
@@ -763,29 +771,37 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
             st.subheader("Selezione 1")
             city1 = st.selectbox("Capitale 1", sorted(capitals), key="c1")
             year1 = st.selectbox("Anno 1", sorted(years), key="y1", index=len(years)-1)
+            season1 = st.selectbox("Stagione 1", seasons, key="s1")
             
         # Selezione 2
         with col2:
             st.subheader("Selezione 2")
             city2 = st.selectbox("Capitale 2", sorted(capitals), key="c2", index=1)
             year2 = st.selectbox("Anno 2", sorted(years), key="y2", index=len(years)-1)
+            season2 = st.selectbox("Stagione 2", seasons, key="s2")
+
+        # Load data per season
+        df_clusters_s1, cluster_means_s1 = load_data(season=season1)
+        df_clusters_s2, cluster_means_s2 = load_data(season=season2)
+        agg_s1 = aggregation_per_year[aggregation_per_year["season"] == season1]
+        agg_s2 = aggregation_per_year[aggregation_per_year["season"] == season2]
 
         # Recupero dati
-        data1 = aggregation_per_year[(aggregation_per_year['capital'] == city1) & (aggregation_per_year['year'] == year1)].iloc[0]
-        data2 = aggregation_per_year[(aggregation_per_year['capital'] == city2) & (aggregation_per_year['year'] == year2)].iloc[0]
+        data1 = agg_s1[(agg_s1['capital'] == city1) & (agg_s1['year'] == year1)].iloc[0]
+        data2 = agg_s2[(agg_s2['capital'] == city2) & (agg_s2['year'] == year2)].iloc[0]
       
         # Recupero centroidi dei cluster di appartenenza
-        cluster_assignment = df_clusters_anni[year1]
-        cluster_centroids = cluster_means_anni[year1]
+        cluster_assignment = df_clusters_s1[year1]
+        cluster_centroids = cluster_means_s1[year1]
         cluster1_idx = cluster_assignment[cluster_assignment['capital'] == city1]['cluster'].iloc[0]
         centroid1 = cluster_centroids.loc[cluster1_idx]
         
-        cluster_assignment = df_clusters_anni[year2]
-        cluster_centroids = cluster_means_anni[year2]
+        cluster_assignment = df_clusters_s2[year2]
+        cluster_centroids = cluster_means_s2[year2]
         cluster2_idx = cluster_assignment[cluster_assignment['capital'] == city2]['cluster'].iloc[0]
         centroid2 = cluster_centroids.loc[cluster2_idx]
 
-        to_drop=['capital', 'year']
+        to_drop=['capital', 'year', 'season']
 
         data1 = data1.drop(columns=to_drop)
         data2 = data2.drop(columns=to_drop)
