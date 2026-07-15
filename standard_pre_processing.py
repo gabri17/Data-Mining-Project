@@ -46,6 +46,22 @@ df['group'] = df['year'].apply(get_group)
 #Mapping capital <-> countries
 capital_to_country = df[['capital', 'country']].drop_duplicates().set_index('capital')['country'].to_dict()
 
+#Mapping capital <-> latitude
+capital_to_lat = (
+    df[['capital', 'lat']]
+    .drop_duplicates()
+    .set_index('capital')['lat']
+    .to_dict()
+)
+
+#Mapping capital <-> longitude
+capital_to_lon = (
+    df[['capital', 'lon']]
+    .drop_duplicates()
+    .set_index('capital')['lon']
+    .to_dict()
+)
+
 columns_to_keep = ['temp_mean_c_approx', 'rain_mm', 'snow_mm', 'windspeed_10m_max_kmh', 'temp_variation', 'sunshine_duration_s', 'daylight_duration_s', 'capital', 'year', 'season', 'date', 'decade', 'group']
 df = df[columns_to_keep]
 
@@ -55,5 +71,12 @@ df.to_parquet("cleaned_history.parquet", index=False)
 
 with open("capital_to_country.json", "w") as f:
     json.dump(capital_to_country, f)
-    
+
+with open("capital_to_lat.json", "w") as f:
+    json.dump(capital_to_lat, f)
+
+with open("capital_to_lon.json", "w") as f:
+    json.dump(capital_to_lon, f)
+
+
 print("Files successfully saved!")
