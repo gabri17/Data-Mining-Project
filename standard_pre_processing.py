@@ -62,10 +62,27 @@ capital_to_lon = (
     .to_dict()
 )
 
+# Standardizing wind and app_temp_min_c outliers
+
+# Identify technical outliers based on the EDA
+mask_wind = df['windspeed_10m_max_kmh'] > 150
+mask_temp = df['app_temp_min_c'] < -60
+
+# Calculate 7-day centered rolling mean for the problematic columns
+# Group by capital to avoid mixing data from different cities
+window_size = 7
+df['wind_rolling'] = df.groupby('capital')['windspeed_10m_max_kmh'].transform(lambda x: x.rolling(window=window_size, center=True, min_periods=1).mean())
+df['temp_rolling'] = df.groupby('capital')['app_temp_min_c'].transform(lambda x: x.rolling(window=window_size, center=True, min_periods=1).mean())
+
+# Replace only the anomalous values with the rolling mean
+df.loc[mask_wind, 'windspeed_10m_max_kmh'] = df.loc[mask_wind, 'wind_rolling']
+df.loc[mask_temp, 'app_temp_min_c'] = df.loc[mask_temp, 'temp_rolling']
+
+# Clean up auxiliary columns
+df = df.drop(columns=['wind_rolling', 'temp_rolling'])
+
 columns_to_keep = ['temp_mean_c_approx', 'rain_mm', 'snow_mm', 'windspeed_10m_max_kmh', 'temp_variation', 'sunshine_duration_s', 'daylight_duration_s', 'capital', 'year', 'season', 'date', 'decade', 'group']
 df = df[columns_to_keep]
-
-#drop wind outliers
 
 df.to_parquet("cleaned_history.parquet", index=False)
 
