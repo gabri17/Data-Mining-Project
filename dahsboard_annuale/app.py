@@ -2,15 +2,12 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
-from sklearn.preprocessing import MinMaxScaler
+import plotly.express as px
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
+from sklearn.decomposition import PCA
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
-import plotly.graph_objects as go
-import numpy as np
-import streamlit as st
-import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-import numpy as np
 
 #streamlit run app.py
 
@@ -621,6 +618,88 @@ def plot_precip_evo_city(cluster_means_anni, df_clusters_anni, aggregated_data, 
     return fig
 
 
+def plot_PCA_interactive(
+    df_cluster_assignment,
+    colors_to_use=None,
+    capitals=None
+):
+    if colors_to_use is None:
+        colors_to_use = get_colors()
+    if capitals is None:
+        capitals = [
+            'Rome', 'Ottawa', 'Tokyo', 'Moscow', 'Mexico City',
+            'Windhoek', 'Berlin', 'Luanda', 'Jakarta', 'Lima',
+            'Santiago', 'Canberra', 'New Delhi', 'Algiers'
+        ]
+
+    numerical_cols = df_cluster_assignment.select_dtypes(include=[np.number]).columns.tolist()
+    numerical_cols = [c for c in numerical_cols if c not in ['year', 'cluster']]
+
+    df_clean = df_cluster_assignment.dropna(subset=numerical_cols).copy()
+    df_clean = df_clean.sort_values(by='year')
+
+    scaler = StandardScaler()
+    X_scaled = scaler.fit_transform(df_clean[numerical_cols])
+
+    pca = PCA(n_components=2)
+    pca_result = pca.fit_transform(X_scaled)
+
+    df_clean['pca1'] = pca_result[:, 0]
+    df_clean['pca2'] = pca_result[:, 1]
+
+    df_clean['label'] = df_clean['capital'].apply(lambda x: x if x in capitals else "")
+    df_clean['cluster_str'] = df_clean['cluster'].astype(str)
+
+    if isinstance(colors_to_use, list):
+        color_map = {str(i): colors_to_use[i] for i in range(len(colors_to_use))}
+    else:
+        color_map = {str(k): v for k, v in colors_to_use.items()}
+
+    fig = px.scatter(
+        df_clean,
+        x='pca1',
+        y='pca2',
+        animation_frame='year',
+        animation_group='capital',
+        color='cluster_str',
+        hover_name='capital',
+        text='label',
+        color_discrete_map=color_map,
+        title='PCA Projection of Climate Clusters Over Time',
+        labels={
+            'pca1': f'PC1 ({pca.explained_variance_ratio_[0]:.1%} variance)',
+            'pca2': f'PC2 ({pca.explained_variance_ratio_[1]:.1%} variance)',
+            'cluster_str': 'Cluster'
+        }
+    )
+
+    fig.update_traces(
+        textposition='top center',
+        textfont=dict(size=10, color='black'),
+        marker=dict(size=10, line=dict(width=1, color='DarkSlateGrey'))
+    )
+
+    fig.update_xaxes(range=[df_clean['pca1'].min() - 1, df_clean['pca1'].max() + 1])
+    fig.update_yaxes(range=[df_clean['pca2'].min() - 1, df_clean['pca2'].max() + 1])
+
+    fig.update_layout(
+        height=700,
+        width=1000,
+        template='plotly_white',
+        title_font=dict(size=20),
+        legend_title_text='Cluster'
+    )
+
+    pca_info = {
+        'pc1_var': pca.explained_variance_ratio_[0],
+        'pc2_var': pca.explained_variance_ratio_[1],
+        'total_var': pca.explained_variance_ratio_.sum(),
+        'loadings': pd.DataFrame(pca.components_, columns=numerical_cols, index=['PC1', 'PC2'])
+    }
+
+    return fig, pca_info
+
+
 # Caricamento
 df_clusters_anni, cluster_means_anni = load_data()
 aggregation_per_year = load_raw_data()
@@ -633,7 +712,7 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
     # SIDEBAR
     # ==============================================================================
     st.sidebar.title("Navigazione")
-    page = st.sidebar.radio("Vai a:", ["Mappa Annuale", "Evoluzione temporale", "Confronto Anni", "Analisi Capitali (Radar)"])
+    page = st.sidebar.radio("Vai a:", ["Mappa Annuale", "Evoluzione temporale", "Confronto Anni", "Analisi Capitali (Radar)", "Analisi PCA"])
     
     st.sidebar.markdown("---")
     st.sidebar.info(
@@ -882,4 +961,71 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
             st.plotly_chart(fig_city2, width='stretch')
       
         st.info("ℹ️ I valori nel grafico sono normalizzati (0 = min globale, 1 = max globale) per permettere il confronto tra unità di misura diverse (mm, °C, giorni).")
-        
+
+    # ==============================================================================
+    # PAGINA 5: PCA INTERATTIVA
+    # ==============================================================================
+    elif page == "Analisi PCA":
+        st.title("🔬 Analisi PCA — Proiezione dei Cluster nel Tempo")
+
+        st.info("Visualizza l'evoluzione dei cluster climatici proiettati nello spazio bidimensionale della Principal Component Analysis. Usa lo slider per muoverti tra gli anni.")
+
+        col_opt1, col_opt2 = st.columns(2)
+
+        with col_opt1:
+            year_range = st.slider(
+                "Range anni",
+                min_value=int(min(years)),
+                max_value=int(max(years)),
+                value=(int(min(years)), int(max(years))),
+                key="pca_year_range"
+            )
+
+        with col_opt2:
+            highlight_caps = st.multiselect(
+                "Capitali da evidenziare",
+                options=sorted(capitals),
+                default=['Rome', 'Ottawa', 'Tokyo', 'Moscow', 'Mexico City',
+                         'Windhoek', 'Berlin', 'Luanda', 'Jakarta', 'Lima',
+                         'Santiago', 'Canberra', 'New Delhi', 'Algiers'],
+                key="pca_capitals"
+            )
+
+        df_pca = aggregation_per_year[
+            (aggregation_per_year['year'] >= year_range[0]) &
+            (aggregation_per_year['year'] <= year_range[1])
+        ].copy()
+
+        # Add cluster assignment from df_clusters_anni
+        cluster_map = {}
+        for yr in range(year_range[0], year_range[1] + 1):
+            if yr in df_clusters_anni:
+                df_yr = df_clusters_anni[yr][['capital', 'cluster']]
+                for _, row in df_yr.iterrows():
+                    cluster_map[(row['capital'], yr)] = row['cluster']
+
+        df_pca['cluster'] = df_pca.apply(
+            lambda r: cluster_map.get((r['capital'], r['year']), np.nan), axis=1
+        )
+        df_pca = df_pca.dropna(subset=['cluster'])
+        df_pca['cluster'] = df_pca['cluster'].astype(int)
+
+        fig_pca, pca_info = plot_PCA_interactive(
+            df_pca,
+            capitals=highlight_caps
+        )
+
+        st.plotly_chart(fig_pca, width='stretch')
+
+        st.markdown("### 📊 Statistiche PCA")
+        col_var1, col_var2, col_var3 = st.columns(3)
+        with col_var1:
+            st.metric("PC1 Variance", f"{pca_info['pc1_var']:.1%}")
+        with col_var2:
+            st.metric("PC2 Variance", f"{pca_info['pc2_var']:.1%}")
+        with col_var3:
+            st.metric("Total Variance", f"{pca_info['total_var']:.1%}")
+
+        st.markdown("### 📋 Loadings PCA")
+        st.dataframe(pca_info['loadings'].T.style.format("{:.3f}"), width='stretch')
+        st.caption("I loadings indicano quanto ciascuna variabile contribuisce ai componenti principali. Valori alti in assoluto = maggiore influenza.")
