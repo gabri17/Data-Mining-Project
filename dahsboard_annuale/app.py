@@ -970,35 +970,20 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
 
         st.info("Visualizza l'evoluzione dei cluster climatici proiettati nello spazio bidimensionale della Principal Component Analysis. Usa lo slider per muoverti tra gli anni.")
 
-        col_opt1, col_opt2 = st.columns(2)
+        highlight_caps = st.multiselect(
+            "Capitali da evidenziare",
+            options=sorted(capitals),
+            default=['Rome', 'Ottawa', 'Tokyo', 'Moscow', 'Mexico City',
+                        'Windhoek', 'Berlin', 'Luanda', 'Jakarta', 'Lima',
+                        'Santiago', 'Canberra', 'New Delhi', 'Algiers'],
+            key="pca_capitals"
+        )
 
-        with col_opt1:
-            year_range = st.slider(
-                "Range anni",
-                min_value=int(min(years)),
-                max_value=int(max(years)),
-                value=(int(min(years)), int(max(years))),
-                key="pca_year_range"
-            )
-
-        with col_opt2:
-            highlight_caps = st.multiselect(
-                "Capitali da evidenziare",
-                options=sorted(capitals),
-                default=['Rome', 'Ottawa', 'Tokyo', 'Moscow', 'Mexico City',
-                         'Windhoek', 'Berlin', 'Luanda', 'Jakarta', 'Lima',
-                         'Santiago', 'Canberra', 'New Delhi', 'Algiers'],
-                key="pca_capitals"
-            )
-
-        df_pca = aggregation_per_year[
-            (aggregation_per_year['year'] >= year_range[0]) &
-            (aggregation_per_year['year'] <= year_range[1])
-        ].copy()
+        df_pca = aggregation_per_year.copy()
 
         # Add cluster assignment from df_clusters_anni
         cluster_map = {}
-        for yr in range(year_range[0], year_range[1] + 1):
+        for yr in range(1995, 2025):
             if yr in df_clusters_anni:
                 df_yr = df_clusters_anni[yr][['capital', 'cluster']]
                 for _, row in df_yr.iterrows():
