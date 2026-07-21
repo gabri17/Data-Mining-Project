@@ -17,7 +17,7 @@ from plotly.subplots import make_subplots
 st.set_page_config(page_title="Climate Cluster Dashboard - Yearly analysis (1995-2024)", layout="wide")
 
 @st.cache_data
-def load_raw_data(file_path="./csv_files/aggregation_per_anno.csv"):
+def load_raw_data(file_path="dashboard_annuale/csv_files/aggregation_per_anno.csv"):
     """
     Carica i dati con le medie annuali delle capitali.
     """
@@ -27,7 +27,7 @@ def load_raw_data(file_path="./csv_files/aggregation_per_anno.csv"):
 
 
 @st.cache_data
-def load_data(directory_path="./csv_files"):
+def load_data(directory_path="dashboard_annuale/csv_files"):
     """
     Carica i dati di clusterizzazione e dei centroidi.
     """
