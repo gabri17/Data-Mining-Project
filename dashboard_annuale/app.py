@@ -9,7 +9,8 @@ import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 from plotly.subplots import make_subplots
 
-#streamlit run app.py
+#in src of project:
+#streamlit run .\dashboard_annuale\app.py
 
 # ==============================================================================
 # 1. CONFIGURAZIONE E CARICAMENTO DATI
