@@ -711,22 +711,22 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
     # ==============================================================================
     # SIDEBAR
     # ==============================================================================
-    st.sidebar.title("Navigazione")
-    page = st.sidebar.radio("Vai a:", ["Mappa Annuale", "Evoluzione temporale", "Confronto Anni", "Analisi Capitali (Radar)", "Analisi PCA"])
+    st.sidebar.title("Menu")
+    page = st.sidebar.radio("Go to:", ["Annual Map", "Time evolution", "Year-over-Year Comparison", "Capital Analysis (Radar)", "PCA Analysis"])
     
     st.sidebar.markdown("---")
     st.sidebar.info(
-        "**Nota:** Il clustering riguarda le *capitali*. "
-        "La mappa colora direttamente lo stato per una leggibilità piu semplice della mappa."
+        "**Note:** Clustering applies to the *capitals*."
+        " The map colors the state directly for easier readability."
     )
 
     # ==============================================================================
     # PAGINA 1: MAPPA ANIMATA
     # ==============================================================================
-    if page == "Mappa Annuale":
-        st.title("🗺️ Evoluzione Climatica Globale")
+    if page == "Annual Map":
+        st.title("🗺️ Global Climatic Evolution")
         
-        st.info("Premi 'Play' per vedere come cambiano i cluster climatici nel tempo.")
+        st.info("Press 'Play' to see how climate clusters change over time.")
         
         # Generazione Mappa
         with st.spinner("Preparazione animazione..."):
@@ -738,7 +738,7 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
             if fig_anim:
                 st.plotly_chart(fig_anim, width='stretch')
         
-        st.markdown("### 📊 Statistiche Cluster per anno")
+        st.markdown("### 📊 Cluster statistics by year")
         col_stats_1, col_stats_2 = st.columns([1, 1])
         with col_stats_1:
             stats_year = st.slider(
@@ -761,7 +761,7 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
                 cluster_means_anni[stats_year],
                 width='stretch'
             )
-            st.caption("Valori medi per ciascun cluster nell'anno selezionato.")
+            st.caption("Average values ​​for each cluster in the selected year.")
         else:
             df_year = df_clusters_anni[stats_year].copy()
             distribuzione = (
@@ -776,13 +776,13 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
                 (distribuzione["capitali"] / distribuzione["capitali"].sum()) * 100
             ).round(2)
             st.dataframe(distribuzione, width='stretch')
-            st.caption("Conteggio capitali per cluster nell'anno selezionato.")
+            st.caption("Capital count by cluster for the selected year.")
     
     # ==============================================================================
     # PAGINA 2: EVOLUZIONE TEMPROALE
     # ==============================================================================
-    elif page == "Evoluzione temporale":
-        st.title("🗺️ Evoluzione temperatura e precipitazioni")
+    elif page == "Time evolution":
+        st.title("🗺️ Temperature and precipitation trends")
         
         fig1 = plot_temp_evo(cluster_means_anni, years)
         fig2 = plot_precip_evo(cluster_means_anni, years)
@@ -790,7 +790,7 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
         st.pyplot(fig1, width='stretch')
         st.pyplot(fig2, width='stretch')
 
-        st.markdown("### 📊 Evoluzione città")
+        st.markdown("### 📊 City evolution")
         selected_city = st.selectbox("Capitale", sorted(capitals), key="c")
         fig3 = plot_temp_evo_city(cluster_means_anni, df_clusters_anni, aggregation_per_year, years, selected_city)
         st.pyplot(fig3, width='stretch')
@@ -801,48 +801,48 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
     # ==============================================================================
     # PAGINA 3: CONFRONTO DUE ANNI
     # ==============================================================================
-    elif page == "Confronto Anni":
-        st.title("🗺️ Confronto biennale")
+    elif page == "Year-over-Year Comparison":
+        st.title("🗺️ Two-year comparison")
         
         col1, col2 = st.columns(2)
 
         # Selezione 1
         with col1:
-            st.subheader("Selezione 1")
+            st.subheader("Selection 1")
             year1 = st.selectbox("Anno 1", sorted(years), key="y1", index=len(years)-1)
             
         # Selezione 2
         with col2:
-            st.subheader("Selezione 2")
+            st.subheader("Selection 2")
             year2 = st.selectbox("Anno 2", sorted(years), key="y2", index=len(years)-1)
         
         # Genera il grafico
         fig_compare = plot_comparison_maps(df_clusters_anni, year1, year2, n_clusters=5)
         st.plotly_chart(fig_compare, width='stretch')
         
-        st.info("💡 **Nota:** I paesi con colori vivaci hanno cambiato cluster tra i due anni selezionati. I paesi sbiaditi sono rimasti stabili.")
+        st.info("💡 **Note:** Countries shown in bright colors changed clusters between the two selected years. Faded countries remained stable.")
         
-        st.markdown("### 📊 Flussi di capitali tra cluster")
+        st.markdown("### 📊 Capital flows between clusters")
         fig_sankey = plot_cluster_flow_sankey_first_to_last(df_clusters_anni, year1, year2)
         st.plotly_chart(fig_sankey, width='stretch')
 
     # ==============================================================================
     # PAGINA 4: RADAR PLOT E CONFRONTO CAPITALI
     # ==============================================================================
-    elif page == "Analisi Capitali (Radar)":
-        st.title("🕸️ Analisi Dettagliata (Radar Plot)")
+    elif page == "Capital Analysis (Radar)":
+        st.title("🕸️ Detailed Analysis (Radar Plot)")
         
         col1, col2 = st.columns(2)
         
         # Selezione 1
         with col1:
-            st.subheader("Selezione 1")
+            st.subheader("Selection 1")
             city1 = st.selectbox("Capitale 1", sorted(capitals), key="c1")
             year1 = st.selectbox("Anno 1", sorted(years), key="y1", index=len(years)-1)
             
         # Selezione 2
         with col2:
-            st.subheader("Selezione 2")
+            st.subheader("Selection 2")
             city2 = st.selectbox("Capitale 2", sorted(capitals), key="c2", index=1)
             year2 = st.selectbox("Anno 2", sorted(years), key="y2", index=len(years)-1)
 
@@ -960,15 +960,15 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
         with col_rad2:
             st.plotly_chart(fig_city2, width='stretch')
       
-        st.info("ℹ️ I valori nel grafico sono normalizzati (0 = min globale, 1 = max globale) per permettere il confronto tra unità di misura diverse (mm, °C, giorni).")
+        st.info("ℹ️ The values in the plots are normalized (0 = global minimum, 1 = global maximum) to allow for comparison between different units of measurement (mm, °C, days).")
 
     # ==============================================================================
     # PAGINA 5: PCA INTERATTIVA
     # ==============================================================================
-    elif page == "Analisi PCA":
-        st.title("🔬 Analisi PCA — Proiezione dei Cluster nel Tempo")
+    elif page == "PCA Analysis":
+        st.title("🔬 PCA Analysis — Projection of Clusters Over Time")
 
-        st.info("Visualizza l'evoluzione dei cluster climatici proiettati nello spazio bidimensionale della Principal Component Analysis. Usa lo slider per muoverti tra gli anni.")
+        st.info("Visualize the evolution of climate clusters projected into the two-dimensional space of Principal Component Analysis. Use the slider to navigate through the years.")
 
         highlight_caps = st.multiselect(
             "Capitali da evidenziare",
@@ -1002,7 +1002,7 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
 
         st.plotly_chart(fig_pca, width='stretch')
 
-        st.markdown("### 📊 Statistiche PCA")
+        st.markdown("### 📊 PCA Statistics")
         col_var1, col_var2, col_var3 = st.columns(3)
         with col_var1:
             st.metric("PC1 Variance", f"{pca_info['pc1_var']:.1%}")
@@ -1013,4 +1013,4 @@ if df_clusters_anni is not None and cluster_means_anni is not None and aggregati
 
         st.markdown("### 📋 Loadings PCA")
         st.dataframe(pca_info['loadings'].T.style.format("{:.3f}"), width='stretch')
-        st.caption("I loadings indicano quanto ciascuna variabile contribuisce ai componenti principali. Valori alti in assoluto = maggiore influenza.")
+        st.caption("Loadings indicate the extent to which each variable contributes to the principal components. High absolute values = greater influence.")
