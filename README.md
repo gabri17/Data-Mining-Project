@@ -178,7 +178,7 @@ streamlit run dashboard_annuale_stagionale\app.py
 
 - **EDA:** Identified global temperature gradients, seasonal patterns
  and extreme weather events across 160+ capitals.
-- **Clustering:** Discovered distinct climate groups among world capitals (e.g., tropical, arid, temperate, continental).
+- **Clustering:** Discovered distinct climate groups among world capitals (see below).
 - **Yearly Evolution:** Tracked how cities shift between climate clusters over the 30-year period, highlighting potential climate change impacts.
 - **Seasonal Analysis:** Revealed intra-annual climate variability and seasonal cluster transitions.
 
