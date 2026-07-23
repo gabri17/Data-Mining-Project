@@ -187,8 +187,7 @@ Detailed results and visualizations can be found in the respective notebooks, in
 
 Clustering has found **distinct** and **recognizable** climate zones.
 * **Cluster 0 (Blue) Subarctic and Cold Continental**
-* **Cluster 1 (Orange) Tropical Savanna and Warm Semi-Arid**:
-* **Cluster 2 (Green) Temperate and Mid-Latitude**:
-* **Cluster 3 (Red) Equatorial Rainforest and Monsoon**:
-* **Cluster 4 (Purple) Arid, Desert and Dry Subtropical**:
-
+* **Cluster 1 (Orange) Tropical Savanna and Warm Semi-Arid**
+* **Cluster 2 (Green) Temperate and Mid-Latitude**
+* **Cluster 3 (Red) Equatorial Rainforest and Monsoon**
+* **Cluster 4 (Purple) Arid, Desert and Dry Subtropical**
