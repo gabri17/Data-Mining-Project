@@ -389,21 +389,21 @@ if aggregation_per_year is not None:
                 st.warning("Nessun dato disponibile per la visualizzazione della mappa.")
         
         st.markdown("---")
-        st.markdown("### 📊 Proiezione Dati sul Dataframe")
+        st.markdown("### 📊 Projecting Data onto the Dataframe")
         
         col_stats_1, col_stats_2 = st.columns([1, 1])
         with col_stats_1:
             available_years = sorted(list(df_clusters_anni.keys()))
             if available_years:
                 stats_year = st.select_slider(
-                    "Seleziona l'anno per proiettare i dati",
+                    "Select the year to project the data",
                     options=available_years,
                     value=available_years[-1],
                     key="stats_year_slider"
                 )
         with col_stats_2:
             stats_view = st.radio(
-                "Visualizzazione Dataframe",
+                "DataFrame Visualization",
                 ["Centroidi Cluster", "Distribuzione Capitali"],
                 horizontal=True,
                 key="stats_view_radio"
@@ -427,8 +427,8 @@ if aggregation_per_year is not None:
     # PAGINA 2: TRAIETTORIA CITTÀ (HEATMAP)
     # --------------------------------------------------------------------------
     elif page == "City Clustering Assignments":
-        st.title("🏙️ Traiettoria Climatica Stagionale")
-        st.markdown("Osserva come i cluster climatici di una specifica capitale evolvono attraverso le stagioni nel corso degli anni.")
+        st.title("🏙️ Seasonal Climate Trajectory")
+        st.markdown("Observe how the climate clusters of a specific capital city evolve across the seasons over the years.")
         
         # Load the combined dataframe once
         full_df = load_all_seasons_data()
