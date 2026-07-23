@@ -28,9 +28,9 @@ Climate analysis and clustering of global capital cities based on historical wea
 
 This project performs a comprehensive analysis of historical weather data for major capital cities worldwide, spanning from 1995 to 2024. The main objectives are:
 
-- **Exploratory Data Analysis (EDA):** Understand global weather patterns, identify trends, and detect outliers.
+- **Exploratory Data Analysis (EDA):** Understand global weather patterns, identify trends and detect outliers.
 - **Clustering Analysis:** Group capital cities by their meteorological profiles using various clustering algorithms.
-- **Temporal Evolution:** Track how climate profiles of cities evolve over years and seasons.
+- **Temporal Evolution:** Track how climate profiles of cities evolve over *years* and *seasons*.
 - **Interactive Dashboards:** Visualize clustering results through Streamlit-based dashboards.
 
 ---
@@ -43,14 +43,19 @@ Data-Mining-Project/
 ├── 2_general_clustering.ipynb               # General clustering of capitals (all years)
 ├── 3_yearly_clustering.ipynb                # Year-by-year clustering evolution
 ├── 4_seasonal_clustering.ipynb              # Seasonal clustering evolution
+│
 ├── dataset-download.py                      # Script to download dataset from Kaggle
 ├── standard_pre_processing.py               # Data cleaning and preprocessing script
+│
 ├── history.parquet                          # Raw dataset
+│
 ├── cleaned_history.parquet                  # Cleaned and preprocessed dataset
 ├── capital_to_country.json                  # Mapping: capital -> country
 ├── capital_to_lat.json                      # Mapping: capital -> latitude
 ├── capital_to_lon.json                      # Mapping: capital -> longitude
+│
 ├── requirements.txt                         # Python dependencies
+│
 ├── dashboard_annuale/                       # Annual clustering dashboard
 │   ├── app.py
 │   ├── csv_files/
@@ -76,8 +81,8 @@ Data-Mining-Project/
 3. **Feature Engineering:**
    - Added `season` column (Winter, Spring, Summer, Autumn).
    - Added `temp_variation` (difference between max and min temperature).
-   - Added `year`, `decade`, and `group` columns for temporal analysis.
-4. **Final Features:** `temp_mean_c_approx`, `rain_mm`, `snow_mm`, `windspeed_10m_max_kmh`, `temp_variation`, `sunshine_duration_s`, `daylight_duration_s`.
+   - Added `year`, `decade` and `group` columns for temporal analysis.
+4. **Final Features for clustering:** `temp_mean_c_approx`, `rain_mm`, `snow_mm`, `windspeed_10m_max_kmh`, `temp_variation`, `sunshine_duration_s`, `daylight_duration_s`.
 
 ### Exploratory Data Analysis
 
@@ -170,32 +175,17 @@ streamlit run dashboard_annuale\app.py
 streamlit run dashboard_annuale_stagionale\app.py
 ```
 
----
-
-## Dependencies
-
-- Python 3.8+
-- pandas
-- numpy
-- scikit-learn
-- matplotlib
-- seaborn
-- plotly
-- geopandas
-- scipy
-- streamlit
-- pyarrow
-- kagglehub (for dataset download)
-
-Full list available in `requirements.txt`.
 
 ---
 
 ## Results
 
-- **EDA:** Identified global temperature gradients, seasonal patterns, and extreme weather events across 160+ capitals.
+- **EDA:** Identified global temperature gradients, seasonal patterns
+ and extreme weather events across 160+ capitals.
 - **Clustering:** Discovered distinct climate groups among world capitals (e.g., tropical, arid, temperate, continental).
 - **Yearly Evolution:** Tracked how cities shift between climate clusters over the 30-year period, highlighting potential climate change impacts.
 - **Seasonal Analysis:** Revealed intra-annual climate variability and seasonal cluster transitions.
 
-Detailed results and visualizations can be found in the respective notebooks and dashboards.
+Detailed results and visualizations can be found in the respective notebooks, in the dashboards and in the report attached.
+
+<img width="1415" height="718" alt="clustering_map (1)" src="https://github.com/user-attachments/assets/80583c0c-6539-44ce-8160-f0b69f0aa006" />
