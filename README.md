@@ -11,6 +11,8 @@ This project performs a comprehensive analysis of historical weather data for ma
 - **Temporal Evolution:** Track how climate profiles of cities evolve over *years* and *seasons*.
 - **Interactive Dashboards:** Visualize clustering results through Streamlit-based [dashboards](#dashboards).
 
+See a comprehensive resume of results in the PDF report inside the repository!
+
 ---
 
 ## Table of Contents
