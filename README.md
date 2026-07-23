@@ -9,7 +9,7 @@ This project performs a comprehensive analysis of historical weather data for ma
 - **Exploratory Data Analysis (EDA):** Understand global weather patterns, identify trends and detect outliers.
 - **Clustering Analysis:** Group capital cities by their meteorological profiles using various clustering algorithms.
 - **Temporal Evolution:** Track how climate profiles of cities evolve over *years* and *seasons*.
-- **Interactive Dashboards:** Visualize clustering results through Streamlit-based dashboards.
+- **Interactive Dashboards:** Visualize clustering results through Streamlit-based [dashboards](#dashboards).
 
 ---
 
