@@ -74,7 +74,7 @@ Data-Mining-Project/
 2. **Cleaning Steps:**
    - Removed records for Mogadishu (incomplete data).
    - Converted date columns to datetime format.
-   - Handled technical outliers (e.g., wind speeds > 150 km/h, apparent temperatures < -60°C) using 7-day centered rolling means.
+   - Handled technical outliers and wrong measurements (e.g., wind speeds > 150 km/h, apparent temperatures < -60°C) using 7-day centered rolling means.
 3. **Feature Engineering:**
    - Added `season` column (Winter, Spring, Summer, Autumn).
    - Added `temp_variation` (difference between max and min temperature).
@@ -94,13 +94,13 @@ The EDA notebook (`1_eda.ipynb`) covers:
 
 1. **Feature Selection:** PCA analysis to identify the most informative features.
 2. **Feature Aggregation:** Monthly/seasonal aggregations of daily data.
-3. **Data Scaling:** StandardScaler applied to normalize features.
+3. **Data Scaling:** Standardization applied to normalize features and log transformation applied to right-skewed variables.
 4. **Algorithms Evaluated:**
    - **K-Means:** Partitional clustering with elbow method and silhouette analysis.
    - **DBSCAN:** Density-based clustering for discovering arbitrary-shaped clusters.
    - **Hierarchical Clustering:** Agglomerative approach with dendrogram visualization.
    - **BIRCH:** Efficient clustering for large datasets.
-5. **Metrics:** Silhouette Score, Davies-Bouldin Index, Calinski-Harabasz Index.
+5. **Metrics:** Silhouette Score, Davies-Bouldin Index, Calinski-Harabasz Index and many more.
 
 ### Clustering Variants
 
