@@ -20,6 +20,7 @@ This project performs a comprehensive analysis of historical weather data for ma
   - [Data Preprocessing](#data-preprocessing)
   - [Exploratory Data Analysis](#exploratory-data-analysis)
   - [Clustering Approach](#clustering-approach)
+  - [Clustering Variants](#clustering-variants)
 - [Dashboards](#dashboards)
 - [Setup](#setup)
   - [Notebooks](#notebooks)
