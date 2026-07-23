@@ -114,8 +114,8 @@ Two interactive Streamlit dashboards are provided:
 
 | Dashboard | Description | Local deployment | Available link |
 |-----------|-------------|------------------|----------------|
-| **Annual** | Visualizes yearly clustering results | `streamlit run dashboard_annuale\app.py` | <a href="climacluster.streamlit.app">climacluster.streamlit.app</a> |
-| **Seasonal** | Visualizes seasonal clustering results | `streamlit run dashboard_annuale_stagionale\app.py` | <a href="seasoncluster">seasoncluster.streamlit.app</a> |  
+| **Annual** | Visualizes yearly clustering results | `streamlit run dashboard_annuale\app.py` | <a href="https://climacluster.streamlit.app">climacluster.streamlit.app</a> |
+| **Seasonal** | Visualizes seasonal clustering results | `streamlit run dashboard_annuale_stagionale\app.py` | <a href="https://seasoncluster.streamlit.app">seasoncluster.streamlit.app</a> |  
 
 ---
 
