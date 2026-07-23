@@ -99,7 +99,8 @@ The EDA notebook (`1_eda.ipynb`) covers:
    - **BIRCH:** Efficient clustering for large datasets.
 5. **Metrics:** Silhouette Score, Davies-Bouldin Index, Calinski-Harabasz Index.
 
-**Clustering Variants:**
+### Clustering Variants
+
 - **General Clustering** (`2_general_clustering.ipynb`): Clusters all capitals using aggregated data across the full time range.
 - **Yearly Clustering** (`3_yearly_clustering.ipynb`): Clusters capitals year-by-year to track climate profile changes over time.
 - **Seasonal Clustering** (`4_seasonal_clustering.ipynb`): Clusters season-city pairs year-by-year to analyze intra-annual variability.
