@@ -112,10 +112,10 @@ The EDA notebook (`1_eda.ipynb`) covers:
 
 Two interactive Streamlit dashboards are provided:
 
-| Dashboard | Description | Run Command |
-|-----------|-------------|-------------|
-| **Annual** | Visualizes yearly clustering results | `streamlit run dashboard_annuale\app.py` |
-| **Seasonal** | Visualizes seasonal clustering results | `streamlit run dashboard_annuale_stagionale\app.py` |
+| Dashboard | Description | Local deployment | Available link |
+|-----------|-------------|------------------|----------------|
+| **Annual** | Visualizes yearly clustering results | `streamlit run dashboard_annuale\app.py` | <a href="climacluster.streamlit.app">climacluster.streamlit.app</a> |
+| **Seasonal** | Visualizes seasonal clustering results | `streamlit run dashboard_annuale_stagionale\app.py` | <a href="seasoncluster">seasoncluster.streamlit.app</a> |  
 
 ---
 
