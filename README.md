@@ -4,11 +4,17 @@ Climate analysis and clustering of global capital cities based on historical wea
 
 **Dataset:** [Capital Weather Data (Kaggle)](https://www.kaggle.com/datasets/wafaaelhusseini/capital-weather-data-1995-2024)
 
+This project performs a comprehensive analysis of historical weather data for major capital cities worldwide, spanning from 1995 to 2024. The main objectives are:
+
+- **Exploratory Data Analysis (EDA):** Understand global weather patterns, identify trends and detect outliers.
+- **Clustering Analysis:** Group capital cities by their meteorological profiles using various clustering algorithms.
+- **Temporal Evolution:** Track how climate profiles of cities evolve over *years* and *seasons*.
+- **Interactive Dashboards:** Visualize clustering results through Streamlit-based dashboards.
+
 ---
 
 ## Table of Contents
 
-- [Project Overview](#project-overview)
 - [Project Structure](#project-structure)
 - [Methodology](#methodology)
   - [Data Preprocessing](#data-preprocessing)
@@ -20,17 +26,6 @@ Climate analysis and clustering of global capital cities based on historical wea
   - [Dashboards Setup](#dashboards-setup)
 - [Run Dashboard Locally](#run-dashboard-locally)
 - [Results](#results)
-
----
-
-## Project Overview
-
-This project performs a comprehensive analysis of historical weather data for major capital cities worldwide, spanning from 1995 to 2024. The main objectives are:
-
-- **Exploratory Data Analysis (EDA):** Understand global weather patterns, identify trends and detect outliers.
-- **Clustering Analysis:** Group capital cities by their meteorological profiles using various clustering algorithms.
-- **Temporal Evolution:** Track how climate profiles of cities evolve over *years* and *seasons*.
-- **Interactive Dashboards:** Visualize clustering results through Streamlit-based dashboards.
 
 ---
 
