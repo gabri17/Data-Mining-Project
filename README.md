@@ -27,7 +27,7 @@ See a comprehensive resume of results in the PDF report inside the repository!
 - [Setup](#setup)
   - [Notebooks](#notebooks)
   - [Dashboards Setup](#dashboards-setup)
-- [Run Dashboard Locally](#run-dashboard-locally)
+  - [Run Dashboard Locally](#run-dashboard-locally)
 - [Results](#results)
 
 ---
@@ -159,9 +159,7 @@ pip install pandas matplotlib seaborn plotly geopandas scipy pyarrow scikit-lear
    python -m ipykernel install --user --name=climate_clustering_project --display-name "Climate Clustering Project"
    ```
 
----
-
-## Run Dashboard Locally
+### Run Dashboard Locally
 
 After installing dependencies, run the dashboards from the **project root directory** (not from the dashboard subdirectory):
 
