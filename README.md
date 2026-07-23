@@ -19,7 +19,6 @@ Climate analysis and clustering of global capital cities based on historical wea
   - [Notebooks](#notebooks)
   - [Dashboards Setup](#dashboards-setup)
 - [Run Dashboard Locally](#run-dashboard-locally)
-- [Dependencies](#dependencies)
 - [Results](#results)
 
 ---
