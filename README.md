@@ -112,7 +112,7 @@ The EDA notebook (`1_eda.ipynb`) covers:
 
 ## Dashboards
 
-Two interactive Streamlit dashboards are provided:
+Two interactive Streamlit dashboards are provided (you can either deploy them by yourself or follow the links):
 
 | Dashboard | Description | Local deployment | Available link |
 |-----------|-------------|------------------|----------------|
@@ -173,6 +173,7 @@ streamlit run dashboard_annuale\app.py
 streamlit run dashboard_annuale_stagionale\app.py
 ```
 
+Online links for the dashboards are also available. See [dashboards](#dashboards) section!
 
 ---
 
