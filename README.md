@@ -60,6 +60,9 @@ Data-Mining-Project/
 │   ├── app.py
 │   ├── csv_files/
 │   └── requirements.txt
+│   
+├── report_gabriele_volani.pdf               # Report
+│
 └── README.md
 ```
 
