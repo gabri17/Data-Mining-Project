@@ -26,7 +26,6 @@ See a comprehensive resume of results in the PDF report inside the repository!
 - [Dashboards](#dashboards)
 - [Setup](#setup)
   - [Notebooks](#notebooks)
-  - [Dashboards Setup](#dashboards-setup)
   - [Run Dashboard Locally](#run-dashboard-locally)
 - [Results](#results)
 
@@ -131,7 +130,7 @@ To run the notebooks, execute the first cell in each notebook to install the req
 pip install pandas matplotlib seaborn plotly geopandas scipy pyarrow scikit-learn numpy streamlit
 ```
 
-## Run Dashboard Locally
+### Run Dashboard Locally
 
 After installing dependencies, run the dashboards from the **project root directory** (not from the dashboard subdirectory):
 
