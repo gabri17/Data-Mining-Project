@@ -128,38 +128,10 @@ Two interactive Streamlit dashboards are provided (you can either deploy them by
 To run the notebooks, execute the first cell in each notebook to install the required Python packages:
 
 ```bash
-pip install pandas matplotlib seaborn plotly geopandas scipy pyarrow scikit-learn numpy
+pip install pandas matplotlib seaborn plotly geopandas scipy pyarrow scikit-learn numpy streamlit
 ```
 
-### Dashboards Setup
-
-1. Create a virtual environment:
-   ```bash
-   python -m venv venv
-   ```
-
-2. Activate the virtual environment:
-   - **Windows:**
-     ```bash
-     venv\Scripts\activate.bat
-     ```
-   - **Linux/macOS:**
-     ```bash
-     source venv/bin/activate
-     ```
-
-3. Install dependencies:
-   ```bash
-   pip install --upgrade pip
-   pip install -r requirements.txt
-   ```
-
-4. (Optional) Connect the virtual environment to Jupyter notebooks:
-   ```bash
-   python -m ipykernel install --user --name=climate_clustering_project --display-name "Climate Clustering Project"
-   ```
-
-### Run Dashboard Locally
+## Run Dashboard Locally
 
 After installing dependencies, run the dashboards from the **project root directory** (not from the dashboard subdirectory):
 
